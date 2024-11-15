@@ -6,6 +6,7 @@ const int GRID_SIZE = 12;
 const int MINE = 9;
 const int HIDDEN = 10;
 const int FLAGGED = 11;
+int countMinesAround(int grid[][GRID_SIZE], int x, int y);
 
 int minesweeper()
 {
@@ -29,21 +30,12 @@ int minesweeper()
             else grid[i][j]=0;
         }
 
-    for (int i=1;i<=10;i++)
-        for (int j=1;j<=10;j++)
-        {
-            int n=0;
-            if (grid[i][j]==MINE) continue;
-            if (grid[i+1][j]==MINE) n++;
-            if (grid[i][j+1]==MINE) n++;
-            if (grid[i-1][j]==MINE) n++;
-            if (grid[i][j-1]==MINE) n++;
-            if (grid[i+1][j+1]==MINE) n++;
-            if (grid[i-1][j-1]==MINE) n++;
-            if (grid[i-1][j+1]==MINE) n++;
-            if (grid[i+1][j-1]==MINE) n++;
-            grid[i][j]=n;
+    for (int i = 1; i <= GRID_SIZE; i++) {
+        for (int j = 1; j <= GRID_SIZE; j++) {
+            if (grid[i][j] == MINE) continue;
+            grid[i][j] = countMinesAround(grid, i, j);
         }
+    }
 
     while (app.isOpen())
     {
@@ -78,3 +70,17 @@ int minesweeper()
 
     return 0;
 }
+
+int countMinesAround(int grid[][GRID_SIZE], int x, int y) {
+        int n = 0;
+        if (grid[x + 1][y] == MINE) n++;
+        if (grid[x - 1][y] == MINE) n++;
+        if (grid[x][y + 1] == MINE) n++;
+        if (grid[x][y - 1] == MINE) n++;
+        if (grid[x + 1][y + 1] == MINE) n++;
+        if (grid[x - 1][y - 1] == MINE) n++;
+        if (grid[x - 1][y + 1] == MINE) n++;
+        if (grid[x + 1][y - 1] == MINE) n++;
+        return n;
+}
+
