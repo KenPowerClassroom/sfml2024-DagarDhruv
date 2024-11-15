@@ -9,14 +9,18 @@ const int FLAGGED = 11;
 int countMinesAround(int grid[][GRID_SIZE], int x, int y);
 void initializeGrids(int grid[][GRID_SIZE ], int sgrid[][GRID_SIZE]);
 void loadtexture();
+void handleEvents(sf::RenderWindow &app, int grid[][GRID_SIZE], int sgrid[][GRID_SIZE]);
+void renderGrid(sf::RenderWindow &app, int sgrid[][GRID_SIZE], sf::Sprite &sprite);
+
 
 int minesweeper()
 {
     srand(time(0));
 
     RenderWindow app(VideoMode(400, 400), "Minesweeper!");
-
-    int w=TILE_SIZE;
+    Texture texture;
+    texture.loadFromFile("images/minesweeper/tiles.jpg");
+    Sprite sprite(texture);
     int grid[GRID_SIZE][GRID_SIZE];
     int sgrid[GRID_SIZE][GRID_SIZE]; //for showing
 
@@ -25,33 +29,8 @@ int minesweeper()
 
     while (app.isOpen())
     {
-        Vector2i pos = Mouse::getPosition(app);
-        int x = pos.x/w;
-        int y = pos.y/w;
-
-        Event e;
-        while (app.pollEvent(e))
-        {
-            if (e.type == Event::Closed)
-                app.close();
-
-            if (e.type == Event::MouseButtonPressed)
-                if (e.key.code == Mouse::Left) sgrid[x][y]=grid[x][y];
-                else if (e.key.code == Mouse::Right) sgrid[x][y]=11;
-        }
-
-        app.clear(Color::White);
-
-        for (int i=1;i<=10;i++)
-            for (int j=1;j<=10;j++)
-            {
-                if (sgrid[x][y]==MINE) sgrid[i][j]=grid[i][j];
-                s.setTextureRect(IntRect(sgrid[i][j]*w,0,w,w));
-                s.setPosition(i*w, j*w);
-                app.draw(s);
-            }
-
-        app.display();
+        handleEvents(app, grid, sgrid);
+        renderGrid(app, sgrid, sprite);
     }
 
     return 0;
@@ -85,9 +64,42 @@ void initializeGrids(int grid[][GRID_SIZE], int sgrid[][GRID_SIZE]) {
     }
 }
 
-void loadtexture()
+
+
+
+
+void renderGrid(RenderWindow &app, int sgrid[][GRID_SIZE], Sprite &sprite)
 {
-    Texture t;
-    t.loadFromFile("images/minesweeper/tiles.jpg");
-    Sprite s(t);
+    app.clear(Color::White);
+
+    for (int i = 1; i <= GRID_SIZE; i++) {
+        for (int j = 1; j <= GRID_SIZE; j++) {
+            sprite.setTextureRect(IntRect(sgrid[i][j] * TILE_SIZE, 0, TILE_SIZE, TILE_SIZE));
+            sprite.setPosition(i * TILE_SIZE, j * TILE_SIZE);
+            app.draw(sprite);
+        }
+    }
+
+    app.display();
+}
+
+void handleEvents(RenderWindow &app, int grid[][GRID_SIZE], int sgrid[][GRID_SIZE])
+{
+    Event e;
+    while (app.pollEvent(e)) {
+        if (e.type == Event::Closed)
+            app.close();
+
+        if (e.type == Event::MouseButtonPressed) {
+            Vector2i pos = Mouse::getPosition(app);
+            int x = pos.x / TILE_SIZE;
+            int y = pos.y / TILE_SIZE;
+
+            if (e.mouseButton.button == Mouse::Left) {
+                sgrid[x][y] = grid[x][y]; // Reveal tile
+            } else if (e.mouseButton.button == Mouse::Right) {
+                sgrid[x][y] = FLAGGED; // Flag tile
+            }
+        }
+    }
 }
