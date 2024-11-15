@@ -1,7 +1,7 @@
 #include <SFML/Graphics.hpp>
 #include <time.h>
 using namespace sf;
-const int TILE_SIZE = 32;
+const int TILE_SIZE = 32;   ///rename the variables and function
 const int GRID_SIZE = 12;
 const int MINE = 9;
 const int HIDDEN = 10;
@@ -24,7 +24,7 @@ int minesweeper()
     Texture texture;
     texture.loadFromFile("images/minesweeper/tiles.jpg");
     Sprite sprite(texture);
-    int grid[GRID_SIZE][GRID_SIZE];
+    int grid[GRID_SIZE][GRID_SIZE];//Removed magic numbers
     int sgrid[GRID_SIZE][GRID_SIZE]; //for showing
 
    loadtexture();
@@ -32,13 +32,13 @@ int minesweeper()
 
     while (app.isOpen())
     {
-        handleEvents(app, grid, sgrid);
+        handleEvents(app, grid, sgrid); //Extract Related Code into Functions
         renderGrid(app, sgrid, sprite);
     }
 
     return 0;
 }
-
+// makes all the function in seprate functions 
 int countMinesAround(int grid[][GRID_SIZE], int x, int y) {
         int n = 0;
         if (grid[x + 1][y] == MINE) n++;
