@@ -11,7 +11,10 @@ void initializeGrids(int grid[][GRID_SIZE ], int sgrid[][GRID_SIZE]);
 void loadtexture();
 void handleEvents(sf::RenderWindow &app, int grid[][GRID_SIZE], int sgrid[][GRID_SIZE]);
 void renderGrid(sf::RenderWindow &app, int sgrid[][GRID_SIZE], sf::Sprite &sprite);
-
+struct Position {
+    int x;
+    int y;
+};
 
 int minesweeper()
 {
@@ -85,19 +88,19 @@ void renderGrid(RenderWindow &app, int sgrid[][GRID_SIZE], Sprite &sprite)
 
 void handleEvents(RenderWindow &app, int grid[][GRID_SIZE], int sgrid[][GRID_SIZE])
 {
-    Event e;
-    while (app.pollEvent(e)) {
-        if (e.type == Event::Closed)
+    Event event;
+    while (app.pollEvent(event)) {
+        if (event.type == Event::Closed)
             app.close();
 
-        if (e.type == Event::MouseButtonPressed) {
+        if (event.type == Event::MouseButtonPressed) {
             Vector2i pos = Mouse::getPosition(app);
             int x = pos.x / TILE_SIZE;
             int y = pos.y / TILE_SIZE;
 
-            if (e.mouseButton.button == Mouse::Left) {
+            if (event.mouseButton.button == Mouse::Left) {
                 sgrid[x][y] = grid[x][y]; // Reveal tile
-            } else if (e.mouseButton.button == Mouse::Right) {
+            } else if (event.mouseButton.button == Mouse::Right) {
                 sgrid[x][y] = FLAGGED; // Flag tile
             }
         }
