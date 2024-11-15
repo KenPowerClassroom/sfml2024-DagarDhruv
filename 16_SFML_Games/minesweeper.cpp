@@ -7,6 +7,8 @@ const int MINE = 9;
 const int HIDDEN = 10;
 const int FLAGGED = 11;
 int countMinesAround(int grid[][GRID_SIZE], int x, int y);
+void initializeGrids(int grid[][GRID_SIZE ], int sgrid[][GRID_SIZE]);
+void loadtexture();
 
 int minesweeper()
 {
@@ -18,24 +20,8 @@ int minesweeper()
     int grid[GRID_SIZE][GRID_SIZE];
     int sgrid[GRID_SIZE][GRID_SIZE]; //for showing
 
-    Texture t;
-    t.loadFromFile("images/minesweeper/tiles.jpg");
-    Sprite s(t);
-
-    for (int i=1; i <= 10; i++)
-        for (int j=1;j<=10;j++)
-        {
-            sgrid[i][j]=10;
-            if (rand()%5==0)  grid[i][j]=MINE;
-            else grid[i][j]=0;
-        }
-
-    for (int i = 1; i <= GRID_SIZE; i++) {
-        for (int j = 1; j <= GRID_SIZE; j++) {
-            if (grid[i][j] == MINE) continue;
-            grid[i][j] = countMinesAround(grid, i, j);
-        }
-    }
+   loadtexture();
+   initializeGrids(grid, sgrid);
 
     while (app.isOpen())
     {
@@ -83,4 +69,25 @@ int countMinesAround(int grid[][GRID_SIZE], int x, int y) {
         if (grid[x + 1][y - 1] == MINE) n++;
         return n;
 }
+void initializeGrids(int grid[][GRID_SIZE], int sgrid[][GRID_SIZE]) {
+    for (int i = 1; i <= GRID_SIZE; i++) {
+        for (int j = 1; j <= GRID_SIZE; j++) {
+            sgrid[i][j] = HIDDEN;
+            grid[i][j] = (rand() % 5 == 0) ? MINE : 0;
+        }
+    }
 
+    for (int i = 1; i <= GRID_SIZE; i++) {
+        for (int j = 1; j <= GRID_SIZE; j++) {
+            if (grid[i][j] != MINE)
+                grid[i][j] = countMinesAround(grid, i, j);
+        }
+    }
+}
+
+void loadtexture()
+{
+    Texture t;
+    t.loadFromFile("images/minesweeper/tiles.jpg");
+    Sprite s(t);
+}
