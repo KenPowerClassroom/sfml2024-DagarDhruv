@@ -8,6 +8,7 @@ const int HIDDEN = 10;
 const int FLAGGED = 11;
 int countMinesAround(int grid[][GRID_SIZE], int x, int y);
 void initializeGrids(int grid[][GRID_SIZE ], int sgrid[][GRID_SIZE]);
+void loadtexture();
 void handleEvents(sf::RenderWindow &app, int grid[][GRID_SIZE], int sgrid[][GRID_SIZE]);
 void renderGrid(sf::RenderWindow &app, int sgrid[][GRID_SIZE], sf::Sprite &sprite);
 struct Position {
@@ -26,6 +27,7 @@ int minesweeper()
     int grid[GRID_SIZE][GRID_SIZE];//Removed magic numbers
     int sgrid[GRID_SIZE][GRID_SIZE]; //for showing
 
+   loadtexture();
    initializeGrids(grid, sgrid);
 
     while (app.isOpen())

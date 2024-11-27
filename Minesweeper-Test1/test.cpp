@@ -37,3 +37,25 @@ TEST(GridTest, CountMinesAround_MultipleAdjacentMines) {
 
     EXPECT_EQ(result, 3);  // The result should be 3 as there are 3 adjacent mines
 }
+TEST(GridTest, CountMinesAround_AllAdjacentMines) {
+    int grid[GRID_SIZE][GRID_SIZE] = { 0 };  // Initialize an empty grid
+    grid[4][4] = MINE;
+    grid[4][5] = MINE;
+    grid[4][6] = MINE;
+    grid[5][4] = MINE;
+    grid[5][6] = MINE;
+    grid[6][4] = MINE;
+    grid[6][5] = MINE;
+    grid[6][6] = MINE;
+
+    int result = countMinesAround(grid, 5, 5);  // Test the tile at the center of these mines
+
+    EXPECT_EQ(result, 8);  // There should be 8 mines surrounding the tile
+}
+TEST(GridTest, CountMinesAround_IsolatedTile) {
+    int grid[GRID_SIZE][GRID_SIZE] = { 0 };  // Initialize an empty grid
+
+    int result = countMinesAround(grid, 0, 0);  // Test the top-left corner with no mines
+
+    EXPECT_EQ(result, 0);  // There are no adjacent mines, so the result should be 0
+}
