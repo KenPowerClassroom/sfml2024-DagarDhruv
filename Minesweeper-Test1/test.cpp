@@ -1,5 +1,25 @@
 #include "pch.h"
+#define SFML_STATIC
+#ifdef _DEBUG
+#pragma comment(lib,"sfml-graphics-s-d.lib")
+#pragma comment(lib,"sfml-audio-s-d.lib")
+#pragma comment(lib,"sfml-system-s-d.lib")
+#pragma comment(lib,"sfml-window-s-d.lib")
+#pragma comment(lib,"sfml-network-s-d.lib")
+#else
+#pragma comment(lib,"sfml-graphics-s.lib")
+#pragma comment(lib,"sfml-audio-s.lib")
+#pragma comment(lib,"sfml-system-s.lib")
+#pragma comment(lib,"sfml-window-s.lib")
+#pragma comment(lib,"sfml-network-s.lib")
+#endif
+#pragma comment(lib,"opengl32.lib")
+#pragma comment(lib,"glu32.lib")
+#pragma comment(lib,"winmm.lib")
+#pragma comment(lib,"freetype.lib")
+
 #include"../16_SFML_Games/minesweeper.cpp"
+
 // Test for counting mines around a given tile
 TEST(GridTest, CountMinesAround_NoMines) {
     int grid[GRID_SIZE][GRID_SIZE] = { 0 };  // Initialize an empty grid with no mines
